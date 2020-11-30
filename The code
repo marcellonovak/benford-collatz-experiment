@@ -1,0 +1,41 @@
+import numpy as np # Import everything
+import math
+import matplotlib.pyplot as plt
+
+fig = plt.figure()
+labels = ('1', '2', '3', '4', '5', '6', '7', '8', '9') # The buckets
+occurences = [0, 0, 0, 0, 0, 0, 0, 0, 0] # Our to-be-data
+
+def collatz(number):
+    counter = 0
+
+    # The sequence itself
+    
+    while number != 1:
+        if number % 2 == 0:
+            number = number / 2
+            counter += 1
+        else:
+            number = 3 * number + 1
+            counter += 1
+
+    return(counter) # How many steps the sequence took
+
+# Testing for benford's law
+def firstdigit(x):
+    while x >= 10:
+        x = math.floor(x/10)
+    return(x)
+
+# The experiment
+for i in range(2, 10**7):
+    n = firstdigit(collatz(i))
+    occurences[n - 1] += 1 # Throwing the result into a "bucket"
+
+plot = plt.bar(labels, occurences, color = "maroon") # Pretty graph
+
+for value in plot:
+    height = value.get_height()
+    plt.text(value.get_x() + value.get_width()/2, height,'%d' % int(height), ha='center', va='bottom')
+
+plt.show()
